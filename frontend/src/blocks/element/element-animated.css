@@ -1,0 +1,21 @@
+@keyframes element-animated {
+  100%{
+    transform: translateX(220px);
+  }
+}
+
+.element-animated-enter {
+  opacity: 0;
+}
+.element-animated-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.element-animated-exit {
+  opacity: 1;
+}
+.element-animated-exit-active {
+  opacity: 0;
+  animation: element-animated 700ms linear;
+  transition: opacity 800ms linear;
+}

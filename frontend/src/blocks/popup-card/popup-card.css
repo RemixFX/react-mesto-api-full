@@ -1,0 +1,5 @@
+.popup-card {
+  transition: visibility 0.3s, opacity 0.25s linear;
+  display: flex;
+  margin: auto;
+}

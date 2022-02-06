@@ -1,0 +1,10 @@
+.popup-card__image-container {
+  display: flex;
+}
+
+@media screen and (max-width: 700px) {
+  .popup-card__image-container {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+}

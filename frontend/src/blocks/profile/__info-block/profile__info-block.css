@@ -1,0 +1,17 @@
+.profile__info-block {
+  display: grid;
+  grid-template-areas:
+    "two three"
+    "paragraph .";
+  grid-template-columns: auto 24px;
+  align-items: baseline;
+}
+
+@media screen and (max-width: 700px) {
+  .profile__info-block {
+    grid-template-areas:
+      ". two three"
+      ". paragraph .";
+    grid-template-columns: 18px auto 18px;
+  }
+}

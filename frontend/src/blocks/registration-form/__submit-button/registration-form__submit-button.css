@@ -1,0 +1,17 @@
+.registration-form__submit-button {
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  width: 358px;
+  margin-top: 186px;
+  font-size: 18px;
+  line-height: 22px;
+  padding: 14px;
+  transition: opacity 0.2s linear;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.registration-form__submit-button:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,32 @@
+.profile__avatar-button {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: absolute;
+  padding: 0;
+  border: transparent;
+  background-color: transparent;
+  transition: background-color 0.2s linear;
+}
+
+@media screen and (max-width: 700px) {
+  .profile__avatar-button {
+    margin-right: 0;
+  }
+}
+
+.profile__avatar-button:hover {
+  background-image: url(../../../images/update_avatar.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgb(0 0 0 / 80%);
+  width: 124px;
+  height: 124px;
+  z-index: 1;
+  cursor: pointer;
+
+}
+
+.profile__add-button:active {
+  transform: translate(0px,3px);
+  }

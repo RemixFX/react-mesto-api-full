@@ -1,0 +1,5 @@
+.registration-form {
+  display: flex;
+  min-width: 358px;
+  flex-direction: column;
+}
