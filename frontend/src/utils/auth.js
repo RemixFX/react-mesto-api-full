@@ -51,5 +51,5 @@ class Auth {
 
 }
 
-const auth = new Auth('https://auth.nomoreparties.co')
+const auth = new Auth('https://api.insta-mesto.nomoredomains.work')
 export default auth;

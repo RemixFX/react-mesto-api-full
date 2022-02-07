@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
+const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
 const NotFoundError = require('./errors/not-found-error');
@@ -20,6 +21,8 @@ mongoose.connect(
   () => console.log('База данных загружена'),
 );
 app.use(requestLogger);
+app.use(cors);
+
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),

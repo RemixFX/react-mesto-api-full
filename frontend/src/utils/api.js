@@ -83,9 +83,9 @@ class Api {
 }
 
 const api = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-29/",
+  url: "https://api.insta-mesto.nomoredomains.work/",
   headers: {
-    authorization: "0fe39d88-814c-4d9c-a2d1-36a2026603cf",
+    //authorization: "0fe39d88-814c-4d9c-a2d1-36a2026603cf",
     "Content-type": "application/json"
   }
 });
