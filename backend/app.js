@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 // const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
 const NotFoundError = require('./errors/not-found-error');
 const auth = require('./middlewares/auth');
@@ -18,7 +19,7 @@ mongoose.connect(
   { useNewUrlParser: true },
   () => console.log('База данных загружена'),
 );
-
+app.use(requestLogger);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -54,7 +55,7 @@ app.use('/cards', require('./routes/cards'));
 app.use('/users', require('./routes/users'));
 
 // app.use(errors());
-
+app.use(errorLogger);
 app.use('*', (req, res, next) => {
   next(new NotFoundError('запрашиваемый ресурс не найден'));
 });
