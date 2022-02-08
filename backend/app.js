@@ -20,8 +20,8 @@ mongoose.connect(
   { useNewUrlParser: true },
   () => console.log('База данных загружена'),
 );
-app.use(requestLogger);
 app.use(cors);
+app.use(requestLogger);
 
 app.post('/signin', celebrate({
   body: Joi.object().keys({
