@@ -1,7 +1,8 @@
 class Api {
-  constructor(url) {
-      this._url = url;;
-  }
+  constructor(options) {
+    this._url = options.url;
+    this._headers = options.headers;
+}
 
   _checkResponse(res) {
       if (res.ok) {
@@ -81,6 +82,12 @@ class Api {
 
 }
 
-const api = new Api("https://api.insta-mesto.nomoredomains.work/");
+const api = new Api({
+  url: "https://api.insta-mesto.nomoredomains.work/",
+  headers: {
+    authorization: "0fe39d88-814c-4d9c-a2d1-36a2026603cf",
+    "Content-type": "application/json"
+  }
+});
 
 export default api;

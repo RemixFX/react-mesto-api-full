@@ -2,6 +2,7 @@ const express = require('express');
 
 const { PORT = 3000 } = process.env;
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 // const { errors } = require('celebrate');
 const { celebrate, Joi } = require('celebrate');
@@ -14,6 +15,7 @@ const { createUser, login } = require('./controllers/users');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 mongoose.connect(
   'mongodb://localhost:27017/mestodb',

@@ -43,7 +43,11 @@ function App() {
 
   // Получение данных профиля с сервера
   React.useEffect(() => {
-    api.getUserData().then(res => setCurrentUser(res))
+    api.getUserData().then(res => {
+      setCurrentUser(res)
+      setLoggedIn(true)
+      setEmail(res.data.email)
+    })
       .catch((err) => console.log(err))
   }, []);
 
@@ -70,16 +74,13 @@ function App() {
       })
   }
 
-  // Сохранение токена и авторизация
+  // Авторизация
 
   function handleLogin(password, email) {
     auth.authorize(password, email)
-      .then(data => {
-        if (data.token) {
-          localStorage.setItem('jwt', data.token)
-        }
+      .then(() => {
         setLoggedIn(true)
-        navigate('main')
+        navigate('/')
       })
       .catch((err) => {
         setIsOpenInfoTooltipError(true)
@@ -89,17 +90,17 @@ function App() {
 
   // Проверка токена
 
-  React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
-    if (token) {
-      auth.checkToken(token).then((res) => {
-        setLoggedIn(true)
-        setEmail(res.data.email)
-        navigate('main')
-      })
-        .catch(err => console.log(err));
-    }
-  }, [navigate])
+//  React.useEffect(() => {
+//    const token = localStorage.getItem('jwt');
+//    if (token) {
+//      auth.checkToken(token).then((res) => {
+//        setLoggedIn(true)
+//        setEmail(res.data.email)
+//        navigate('main')
+//      })
+//        .catch(err => console.log(err));
+//    }
+//  }, [navigate])
 
   // Удаление токена
 
@@ -213,7 +214,7 @@ function App() {
           onSignOut={handleSignOut}
         />
         <Routes>
-          <Route path="/main" element={<ProtectedRoute
+          <Route path="/" element={<ProtectedRoute
             component={Main}
             loggedIn={loggedIn}
             onEditProfile={() => setIsEditProfilePopupOpen(!isEditProfilePopupOpen)}
@@ -229,7 +230,7 @@ function App() {
 
           <Route path="/signin" element={<Login onLogin={handleLogin} />} />
 
-          <Route path="*" element={loggedIn ? <Navigate replace to="/main" /> : <Navigate replace to="/signin" />} />
+          <Route path="*" element={loggedIn ? <Navigate replace to="/" /> : <Navigate replace to="/signin" />} />
         </Routes>
         <InfoTooltip title="Вы успешно зарегистрировались!" image={applied}
           isOpen={isOpenInfoTooltipSuccess} onClose={closeAllPopups} onPopupClick={handlePopupClick} />
