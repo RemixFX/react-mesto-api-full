@@ -15,12 +15,17 @@ const login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
-      })
-        .send(token);
+      });
+      res.status(200).send({ message: 'Успешный вход' });
     })
     .catch((err) => {
       next(new UnauthorizedError(err.message));
     });
+};
+
+const logout = (req, res) => {
+  res.clearCookie('jwt');
+  res.status(200).send({ message: 'Выход из профиля' });
 };
 
 const getMyProfile = (req, res, next) => User.findById(req.user._id)
@@ -98,6 +103,7 @@ const updateAvatar = (req, res, next) => {
 
 module.exports = {
   login,
+  logout,
   getMyProfile,
   getUsers,
   getUserId,

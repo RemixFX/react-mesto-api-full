@@ -17,6 +17,7 @@ class Api {
 
   getUserData() {
     return fetch(`${this._url}users/me`, {
+      credentials: 'include',
       headers: this._headers
     })
     .then(this._checkResponse);
@@ -24,6 +25,7 @@ class Api {
 
   getInitialCards() {
     return fetch(`${this._url}cards`, {
+      credentials: 'include',
       headers: this._headers
     })
     .then(this._checkResponse);
@@ -32,6 +34,7 @@ class Api {
   patchUserData(userdata) {
     return fetch(`${this._url}users/me`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: userdata.name,
@@ -44,6 +47,7 @@ class Api {
   uploadNewCard(data) {
     return fetch(`${this._url}cards`, {
       method: "POST",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         name: data.name,
@@ -56,6 +60,7 @@ class Api {
   deleteCard(cardId) {
     return fetch(`${this._url}cards/${cardId}`, {
       method: "DELETE",
+      credentials: 'include',
       headers: this._headers
     })
     .then(this._checkResponse);
@@ -64,6 +69,7 @@ class Api {
   changeLikeCardStatus(cardId, isLiked) {
     return fetch(`${this._url}cards/likes/${cardId}`, {
       method: !isLiked ? "PUT" : "DELETE",
+      credentials: 'include',
       headers: this._headers
     })
     .then(this._checkResponse);
@@ -72,6 +78,7 @@ class Api {
   patchUserAvatar(data) {
     return fetch(`${this._url}users/me/avatar`, {
       method: "PATCH",
+      credentials: 'include',
       headers: this._headers,
       body: JSON.stringify({
         avatar: data.avatar
@@ -85,7 +92,6 @@ class Api {
 const api = new Api({
   url: "https://api.insta-mesto.nomoredomains.work/",
   headers: {
-    authorization: "0fe39d88-814c-4d9c-a2d1-36a2026603cf",
     "Content-type": "application/json"
   }
 });

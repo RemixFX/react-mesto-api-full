@@ -11,7 +11,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const errorHandler = require('./middlewares/error-handler');
 const NotFoundError = require('./errors/not-found-error');
 const auth = require('./middlewares/auth');
-const { createUser, login } = require('./controllers/users');
+const { createUser, login, logout } = require('./controllers/users');
 
 const app = express();
 app.use(bodyParser.json());
@@ -54,6 +54,8 @@ app.post('/signup', celebrate({
     'string.pattern.base': 'Некорректный адрес ссылки',
   }),
 }), createUser);
+
+app.post('/signout', logout);
 
 app.use(auth);
 app.use('/cards', require('./routes/cards'));

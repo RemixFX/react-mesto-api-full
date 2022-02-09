@@ -51,6 +51,17 @@ class Auth {
       .then(this._checkResponse);
   }
 
+  logout = () => {
+    return fetch(`${this._url}/signout`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(this._checkResponse);
+  }
+
 }
 
 const auth = new Auth('https://api.insta-mesto.nomoredomains.work')

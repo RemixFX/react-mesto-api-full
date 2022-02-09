@@ -18,7 +18,6 @@ import ProtectedRoute from './ProtectedRoute';
 import auth from '../utils/auth';
 
 
-
 function App() {
   const [cards, setCards] = React.useState([]);
   const [isOpenInfoTooltipError, setIsOpenInfoTooltipError] = React.useState(false);
@@ -105,7 +104,8 @@ function App() {
   // Удаление токена
 
   function handleSignOut() {
-    localStorage.removeItem('jwt')
+    auth.logout().then((res => console.log(res)))
+    setLoggedIn(false)
     navigate('signin')
     setEmail('')
   }
