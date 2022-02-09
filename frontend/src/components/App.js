@@ -40,23 +40,19 @@ function App() {
     _id: ''
   })
 
-  // Получение данных профиля с сервера
-  React.useEffect(() => {
-    api.getUserData().then(res => {
-      setCurrentUser(res)
-      setLoggedIn(true)
-      setEmail(res.data.email)
-    })
-      .catch((err) => console.log(err))
-  }, []);
 
-  // Получение карточек с сервера
-  React.useEffect(() => {
-    api.getInitialCards().then((res) => {
-      setCards(res)
-    })
-      .catch(err => console.log(err))
-  }, []);
+
+  //  // Получение данных профиля с сервера
+  //  React.useEffect(() => {
+  //    api.getUserData().then(res => {
+  //      setCurrentUser(res)
+  //      setLoggedIn(true)
+  //      setEmail(res.data.email)
+  //    })
+  //      .catch((err) => console.log(err))
+  //  }, []);
+
+
 
   // Регистрация
 
@@ -89,17 +85,17 @@ function App() {
 
   // Проверка токена
 
-//  React.useEffect(() => {
-//    const token = localStorage.getItem('jwt');
-//    if (token) {
-//      auth.checkToken(token).then((res) => {
-//        setLoggedIn(true)
-//        setEmail(res.data.email)
-//        navigate('main')
-//      })
-//        .catch(err => console.log(err));
-//    }
-//  }, [navigate])
+  //  React.useEffect(() => {
+  //    const token = localStorage.getItem('jwt');
+  //    if (token) {
+  //      auth.checkToken(token).then((res) => {
+  //        setLoggedIn(true)
+  //        setEmail(res.data.email)
+  //        navigate('main')
+  //      })
+  //        .catch(err => console.log(err));
+  //    }
+  //  }, [navigate])
 
   // Удаление токена
 
@@ -109,6 +105,35 @@ function App() {
     navigate('signin')
     setEmail('')
   }
+
+  // Проверка авторизации пользователя
+
+  React.useEffect(() => {
+    api.getUserData().then(res => {
+      if (res.statusCode === 200) {
+        setCurrentUser(res)
+        setLoggedIn(true)
+        setEmail(res.data.email)
+      }
+    })
+  }, []);
+
+  // Получение карточек с сервера
+
+  React.useEffect(() => {
+    if (loggedIn === true) {
+      api.getInitialCards().then((res) => {
+        setCards(res)
+      })
+        .catch(err => console.log(err));
+      api.getUserData().then(res => {
+        setCurrentUser(res)
+      })
+        .catch(err => console.log(err));
+    }
+    navigate('/')
+
+  }, [loggedIn, navigate]);
 
   // Постановка лайка
   function handleCardLike(card) {

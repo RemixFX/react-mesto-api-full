@@ -1,6 +1,8 @@
 /* eslint-disable consistent-return */
 const allowedCors = [
   'https://insta-mesto.nomoredomains.work',
+  'http://insta-mesto.nomoredomains.work',
+  'http://localhost:3000',
   'localhost:3000',
 ];
 
