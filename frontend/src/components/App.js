@@ -40,7 +40,15 @@ function App() {
     _id: ''
   })
 
-
+  const checkToken = () => {
+    api.getUserData().then(res => {
+      if (res.statusCode === 200) {
+        setCurrentUser(res)
+        setLoggedIn(true)
+        setEmail(res.data.email)
+      }
+    })
+  }
 
   //  // Получение данных профиля с сервера
   //  React.useEffect(() => {
@@ -74,7 +82,7 @@ function App() {
   function handleLogin(password, email) {
     auth.authorize(password, email)
       .then(() => {
-        setLoggedIn(true)
+        checkToken()
         navigate('/')
       })
       .catch((err) => {
@@ -109,13 +117,7 @@ function App() {
   // Проверка авторизации пользователя
 
   React.useEffect(() => {
-    api.getUserData().then(res => {
-      if (res.statusCode === 200) {
-        setCurrentUser(res)
-        setLoggedIn(true)
-        setEmail(res.data.email)
-      }
-    })
+    checkToken();
   }, []);
 
   // Получение карточек с сервера
