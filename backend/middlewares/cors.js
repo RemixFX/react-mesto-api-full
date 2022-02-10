@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 const allowedCors = [
   'https://insta-mesto.nomoredomains.work',
   'http://insta-mesto.nomoredomains.work',
@@ -20,7 +19,8 @@ module.exports = (req, res, next) => {
   if (method === 'OPTIONS') {
     res.header('Access-Control-Allow-Methods', DEFAULT_ALLOWED_METHODS);
     res.header('Access-Control-Allow-Headers', requestHeaders);
-    return res.end();
+    res.end();
+    return;
   }
   next();
 };

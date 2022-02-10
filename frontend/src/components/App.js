@@ -41,13 +41,17 @@ function App() {
   })
 
   const checkToken = () => {
-    api.getUserData().then(res => {
+    api.getUserData()
+    .then(res => res.json())
+    .then(res => {
+      console.log(res.statusCode)
       if (res.statusCode === 200) {
         setCurrentUser(res)
         setLoggedIn(true)
         setEmail(res.data.email)
       }
     })
+    .catch((err) => console.log(`Ошибка: ${err}`));
   }
 
   //  // Получение данных профиля с сервера
@@ -133,9 +137,8 @@ function App() {
       })
         .catch(err => console.log(err));
     }
-    navigate('/')
 
-  }, [loggedIn, navigate]);
+  }, [loggedIn]);
 
   // Постановка лайка
   function handleCardLike(card) {
