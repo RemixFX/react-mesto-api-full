@@ -67,7 +67,7 @@ class Api {
   }
 
   changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._url}cards/likes/${cardId}`, {
+    return fetch(`${this._url}cards/${cardId}/likes`, {
       method: !isLiked ? "PUT" : "DELETE",
       credentials: 'include',
       headers: this._headers
@@ -90,7 +90,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "https://api.insta-mesto.nomoredomains.work/",
+  url: "http://localhost:3022/",
   headers: {
     "Content-type": "application/json"
   }

@@ -34,44 +34,29 @@ function App() {
 
   // Получение контекста текущего профиля
   const [currentUser, setCurrentUser] = React.useState({
-    avatar: '',
-    name: '',
     about: '',
+    avatar: '',
+    email: '',
+    name: '',
     _id: ''
   })
 
   const checkToken = () => {
-    api.getUserData()
-    .then(res => res.json())
-    .then(res => {
-      console.log(res.statusCode)
-      if (res.statusCode === 200) {
-        setCurrentUser(res)
-        setLoggedIn(true)
-        setEmail(res.data.email)
-      }
-    })
-    .catch((err) => console.log(`Ошибка: ${err}`));
+    auth.checkToken()
+      .then(res => {
+        if (res) {
+          setLoggedIn(true)
+          navigate('/')
+        }
+      })
+      .catch((err) => console.log(`Ошибка: ${err}`));
   }
-
-  //  // Получение данных профиля с сервера
-  //  React.useEffect(() => {
-  //    api.getUserData().then(res => {
-  //      setCurrentUser(res)
-  //      setLoggedIn(true)
-  //      setEmail(res.data.email)
-  //    })
-  //      .catch((err) => console.log(err))
-  //  }, []);
-
-
 
   // Регистрация
 
   function handleRegister(password, email) {
     auth.register(password, email)
       .then(res => {
-        console.log(res)
         setIsOpenInfoTooltipSuccess(true)
         navigate('/signin')
       })
@@ -85,9 +70,11 @@ function App() {
 
   function handleLogin(password, email) {
     auth.authorize(password, email)
-      .then(() => {
-        checkToken()
-        navigate('/')
+      .then((res) => {
+        if (res.message === 'Успешный вход') {
+          setLoggedIn(true)
+          navigate('/')
+        }
       })
       .catch((err) => {
         setIsOpenInfoTooltipError(true)
@@ -95,21 +82,7 @@ function App() {
       })
   }
 
-  // Проверка токена
-
-  //  React.useEffect(() => {
-  //    const token = localStorage.getItem('jwt');
-  //    if (token) {
-  //      auth.checkToken(token).then((res) => {
-  //        setLoggedIn(true)
-  //        setEmail(res.data.email)
-  //        navigate('main')
-  //      })
-  //        .catch(err => console.log(err));
-  //    }
-  //  }, [navigate])
-
-  // Удаление токена
+  // Выход из профиля
 
   function handleSignOut() {
     auth.logout().then((res => console.log(res)))
@@ -119,21 +92,20 @@ function App() {
   }
 
   // Проверка авторизации пользователя
-
   React.useEffect(() => {
     checkToken();
   }, []);
 
-  // Получение карточек с сервера
-
+  // Получение данных профиля и карточек с сервера
   React.useEffect(() => {
-    if (loggedIn === true) {
-      api.getInitialCards().then((res) => {
-        setCards(res)
-      })
-        .catch(err => console.log(err));
+    if (loggedIn) {
       api.getUserData().then(res => {
         setCurrentUser(res)
+        setEmail(res.email)
+      })
+        .catch(err => console.log(err));
+      api.getInitialCards().then((res) => {
+        setCards(res)
       })
         .catch(err => console.log(err));
     }

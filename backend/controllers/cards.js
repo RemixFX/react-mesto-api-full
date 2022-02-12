@@ -4,16 +4,19 @@ const CastError = require('../errors/cast-error');
 const ForbiddenError = require('../errors/forbidden-error');
 
 const getCards = (req, res, next) => Card.find({})
+  .populate([{ path: 'owner', select: 'name about avatar' },
+    { path: 'likes', select: 'name about avatar' }])
   .orFail(new NotFoundError('Карточки не найдены'))
-  .then((cards) => res.status(200).send({ data: cards }))
+  .then((cards) => res.status(200).send(cards))
   .catch(next);
 
 const createCard = (req, res, next) => {
-  const owner = req.user._id;
+  const { _id } = req.user;
   const { name, link } = req.body;
-  console.log({ name, link, owner });
-  return Card.create({ name, link, owner })
-    .then((card) => res.status(201).send({ data: card }))
+  Card.create({ name, link, owner: { _id } })
+    .then((c) => Card.findById(c._id)
+      .populate('owner', ['name', 'about', 'avatar']))
+    .then((card) => res.status(201).send(card))
     .catch(next);
 };
 
@@ -39,9 +42,10 @@ const sendLike = (req, res, next) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $addToSet: { likes: req.user._id } },
   { new: true },
-)
+).populate([{ path: 'owner', select: 'name about avatar' },
+  { path: 'likes', select: 'name about avatar' }])
   .orFail(new NotFoundError('Карточка не найдена'))
-  .then((card) => res.status(200).send({ data: card }))
+  .then((card) => res.status(200).send(card))
   .catch((err) => {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));
@@ -54,9 +58,10 @@ const deleteLike = (req, res, next) => Card.findByIdAndUpdate(
   req.params.cardId,
   { $pull: { likes: req.user._id } },
   { new: true },
-)
+).populate([{ path: 'owner', select: 'name about avatar' },
+  { path: 'likes', select: 'name about avatar' }])
   .orFail(new NotFoundError('Карточка не найдена'))
-  .then((card) => res.status(200).send({ data: card }))
+  .then((card) => res.status(200).send(card))
   .catch((err) => {
     if (err.name === 'CastError') {
       next(new CastError('Переданы некорректные данные'));

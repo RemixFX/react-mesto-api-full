@@ -42,7 +42,7 @@ class Auth {
       .then(this._checkResponse);
   }
 
-  checkToken(token) {
+  checkToken() {
     return fetch(`${this._url}/users/me`, {
       method: 'GET',
       credentials: 'include',
@@ -68,5 +68,5 @@ class Auth {
 
 }
 
-const auth = new Auth('https://api.insta-mesto.nomoredomains.work')
+const auth = new Auth('http://localhost:3022')
 export default auth;

@@ -16,7 +16,7 @@ function Header(props) {
         {location.pathname === '/signup' && <Link
         to='/signin' className="header__link">Войти</Link>}
 
-        {location.pathname === '/main' && <button type='button'
+        {location.pathname === '/' && <button type='button'
         className='header__link header__link_type_button' onClick={props.onSignOut}>Выйти</button>}
 
       </div>
