@@ -205,8 +205,6 @@ function App() {
         setIsEditProfilePopupOpen(false)
         setIsOpenInfoTooltipError(true)
         setIsShowTooltipMessage(err.message)
-      })
-      .then(() => {
         const openBack = () => {
           setIsEditProfilePopupOpen(true)
           setIsOpenInfoTooltipError(false)
@@ -225,8 +223,6 @@ function App() {
         setIsEditAvatarPopupOpen(false)
         setIsOpenInfoTooltipError(true)
         setIsShowTooltipMessage(err.message)
-      })
-      .then(() => {
         const openBack = () => {
           setIsEditAvatarPopupOpen(true)
           setIsOpenInfoTooltipError(false)
@@ -245,8 +241,6 @@ function App() {
         setIsAddPlacePopupOpen(false)
         setIsOpenInfoTooltipError(true)
         setIsShowTooltipMessage(err.message)
-      })
-      .then(() => {
         const openBack = () => {
           setIsAddPlacePopupOpen(true)
           setIsOpenInfoTooltipError(false)
