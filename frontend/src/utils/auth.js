@@ -7,7 +7,7 @@ class Auth {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return res.json().then((message) => Promise.reject(message))
   }
 
   register(password, email) {
@@ -68,5 +68,5 @@ class Auth {
 
 }
 
-const auth = new Auth('http://localhost:3022')
+const auth = new Auth('https://api.insta-mesto.nomoredomains.work')
 export default auth;

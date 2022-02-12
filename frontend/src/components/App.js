@@ -22,6 +22,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [isOpenInfoTooltipError, setIsOpenInfoTooltipError] = React.useState(false);
   const [isOpenInfoTooltipSuccess, setIsOpenInfoTooltipSuccess] = React.useState(false)
+  const [isShowTooltipMessage, setIsShowTooltipMessage] = React.useState('');
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -41,7 +42,8 @@ function App() {
     _id: ''
   })
 
-  const checkToken = () => {
+  // Проверка авторизации пользователя
+  const checkAuth = () => {
     auth.checkToken()
       .then(res => {
         if (res) {
@@ -49,11 +51,10 @@ function App() {
           navigate('/')
         }
       })
-      .catch((err) => console.log(`Ошибка: ${err}`));
+      .catch((err) => console.log(`Ошибка: ${err.message}`));
   }
 
   // Регистрация
-
   function handleRegister(password, email) {
     auth.register(password, email)
       .then(res => {
@@ -62,12 +63,11 @@ function App() {
       })
       .catch((err) => {
         setIsOpenInfoTooltipError(true)
-        console.log(err)
+        setIsShowTooltipMessage(err.message)
       })
   }
 
   // Авторизация
-
   function handleLogin(password, email) {
     auth.authorize(password, email)
       .then((res) => {
@@ -78,12 +78,11 @@ function App() {
       })
       .catch((err) => {
         setIsOpenInfoTooltipError(true)
-        console.log(err)
+        setIsShowTooltipMessage(err.message)
       })
   }
 
   // Выход из профиля
-
   function handleSignOut() {
     auth.logout().then((res => console.log(res)))
     setLoggedIn(false)
@@ -91,9 +90,10 @@ function App() {
     setEmail('')
   }
 
-  // Проверка авторизации пользователя
+  // Вызов проверки авторизации пользователя
   React.useEffect(() => {
-    checkToken();
+    checkAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Получение данных профиля и карточек с сервера
@@ -103,11 +103,17 @@ function App() {
         setCurrentUser(res)
         setEmail(res.email)
       })
-        .catch(err => console.log(err));
+        .catch((err) => {
+          setIsOpenInfoTooltipError(true)
+          setIsShowTooltipMessage(err.message)
+        })
       api.getInitialCards().then((res) => {
         setCards(res)
       })
-        .catch(err => console.log(err));
+        .catch((err) => {
+          setIsOpenInfoTooltipError(true)
+          setIsShowTooltipMessage(err.message)
+        })
     }
 
   }, [loggedIn]);
@@ -118,7 +124,10 @@ function App() {
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
       setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
     })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        setIsOpenInfoTooltipError(true)
+        setIsShowTooltipMessage(err.message)
+      })
   }
 
   // Добавление удаляемой карточки в стейт и открытие попапа подтверждения удаления
@@ -135,7 +144,11 @@ function App() {
       setCards((state) => state.filter((c) => c._id !== forDeleteCard._id))
       closeAllPopups();
     })
-      .catch(err => console.log(err))
+      .catch((err) => {
+        setIsConfirmDeletePopupOpen(false)
+        setIsOpenInfoTooltipError(true)
+        setIsShowTooltipMessage(err.message)
+      })
   }
 
   // Единая функция закрытия попапов
@@ -188,7 +201,18 @@ function App() {
       setCurrentUser(res)
       closeAllPopups()
     })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsEditProfilePopupOpen(false)
+        setIsOpenInfoTooltipError(true)
+        setIsShowTooltipMessage(err.message)
+      })
+      .then(() => {
+        const openBack = () => {
+          setIsEditProfilePopupOpen(true)
+          setIsOpenInfoTooltipError(false)
+        };
+        setTimeout(openBack, 3000);
+      })
   }
 
   // Обновление аватара профиля
@@ -197,7 +221,18 @@ function App() {
       setCurrentUser(res)
       closeAllPopups()
     })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsEditAvatarPopupOpen(false)
+        setIsOpenInfoTooltipError(true)
+        setIsShowTooltipMessage(err.message)
+      })
+      .then(() => {
+        const openBack = () => {
+          setIsEditAvatarPopupOpen(true)
+          setIsOpenInfoTooltipError(false)
+        };
+        setTimeout(openBack, 3000);
+      })
   }
 
   // Добавление новой карточки
@@ -206,7 +241,18 @@ function App() {
       setCards([newCard, ...cards])
       closeAllPopups()
     })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsAddPlacePopupOpen(false)
+        setIsOpenInfoTooltipError(true)
+        setIsShowTooltipMessage(err.message)
+      })
+      .then(() => {
+        const openBack = () => {
+          setIsAddPlacePopupOpen(true)
+          setIsOpenInfoTooltipError(false)
+        };
+        setTimeout(openBack, 3000);
+      })
   }
 
   return (
@@ -237,7 +283,7 @@ function App() {
         <InfoTooltip title="Вы успешно зарегистрировались!" image={applied}
           isOpen={isOpenInfoTooltipSuccess} onClose={closeAllPopups} onPopupClick={handlePopupClick} />
 
-        <InfoTooltip title="Что-то пошло не так! Попробуйте ещё раз." image={badRequest}
+        <InfoTooltip title={isShowTooltipMessage} image={badRequest}
           isOpen={isOpenInfoTooltipError} onClose={closeAllPopups} onPopupClick={handlePopupClick} />
 
         <EditProfilePopup name="profileEdit" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}

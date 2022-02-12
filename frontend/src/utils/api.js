@@ -8,7 +8,8 @@ class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject(`Ошибка: ${res.status}`);
+      return res.json().then((message) => Promise.reject(message))
+      //return Promise.reject(`Ошибка: ${res.status}`);
   }
 
   getPageInfo() {
@@ -90,7 +91,7 @@ class Api {
 }
 
 const api = new Api({
-  url: "http://localhost:3022/",
+  url: "https://api.insta-mesto.nomoredomains.work/",
   headers: {
     "Content-type": "application/json"
   }

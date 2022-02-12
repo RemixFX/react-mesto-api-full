@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
-const { PORT = 3022 } = process.env;
+const { PORT = 3000 } = process.env;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
